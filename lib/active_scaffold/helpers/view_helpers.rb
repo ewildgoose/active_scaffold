@@ -126,7 +126,21 @@ module ActiveScaffold
         link_to_function link_text, "e = #{options[:of]}; e.toggle(); this.innerHTML = (e.style.display == 'none') ? '#{as_(:show)}' : '#{as_(:hide)}'", :class => 'visibility-toggle'
       end
 
-      def render_action_link(link, url_options)
+      def render_action_link_with_cache(link, url_options)
+        @as_cache_action_link = {} unless @as_cache_action_link
+	url_id = url_options[:id] | url_options[:parent_id]
+        action_link = @as_cache_action_link.fetch("render_action_link/#{link.object_id}") do |object_id|
+          url_options_dummy = url_options.clone
+          url_options_dummy[:id] = '___dummy_id___' if url_id
+          url_options_dummy[:link] = '___dummy_label___'
+          (@as_cache_action_link["render_action_link/#{link.object_id}"] = render_action_link_without_cache(link, url_options_dummy))
+        end
+        action_link = action_link.gsub('___dummy_id___', url_id.to_s) if url_id
+        action_link.gsub('___dummy_label___', (url_options[:link] || link.label) )
+      end
+      alias :render_action_link :render_action_link_with_cache
+
+      def render_action_link_without_cache(link, url_options)
         url_options = url_options.clone
         url_options[:action] = link.action
         url_options[:controller] = link.controller if link.controller
@@ -161,7 +175,7 @@ module ActiveScaffold
           html_options[:class] += ' action' if !link.inline?
           html_options[:page_link] = 'true' if !link.inline?
           html_options[:dhtml_confirm] = link.dhtml_confirm.value
-          html_options[:onclick] = link.dhtml_confirm.onclick_function(controller,action_link_id(url_options[:action],url_options[:id] || url_options[:parent_id]))
+	  html_options[:onclick] = link.dhtml_confirm.onclick_function(controller,html_options[:id])
         end
         html_options[:class] += " #{link.html_options[:class]}" unless link.html_options[:class].blank?
 
