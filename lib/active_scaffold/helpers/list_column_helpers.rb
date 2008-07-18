@@ -141,11 +141,17 @@ module ActiveScaffold
       end
 
       def column_override?(column)
-        respond_to?(column_override(column))
+        @as_cache = {} unless @as_cache
+        @as_cache.fetch("column_override?#{column.object_id}") do |object_id| 
+          @as_cache["column_override?#{column.object_id}"] = respond_to?(column_override(column))
+        end
       end
 
       def override_column_ui?(list_ui)
-        respond_to?(override_column_ui(list_ui))
+        @as_cache = {} unless @as_cache
+        @as_cache.fetch("override_column_ui?#{list_ui.object_id}") do |object_id| 
+          @as_cache["override_column_ui?#{list_ui.object_id}"] = respond_to?(override_column_ui(list_ui))
+        end
       end
 
       # the naming convention for overriding column types with helpers
