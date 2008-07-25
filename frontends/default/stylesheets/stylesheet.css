@@ -623,17 +623,20 @@ color: #888;
 }
 
 .active-scaffold input.text-input,
+.active-scaffold input.cds-input,
 .active-scaffold select {
 font: bold 16px arial;
 letter-spacing: -1px;
 border: solid 1px #1F7F00;
 }
 
+.active-scaffold input.cds-input,
 .active-scaffold input.text-input {
 padding: 2px;
 }
 
 .active-scaffold .fieldWithErrors input.text-input,
+.active-scaffold .fieldWithErrors input.cds-input,
 .active-scaffold .fieldWithErrors select {
 border: solid 1px #f00;
 }
@@ -647,6 +650,7 @@ color: #aaa;
 }
 
 .active-scaffold select:focus,
+.active-scaffold input.cds-input:focus,
 .active-scaffold input.text-input:focus {
 background-color: #ffc;
 }
@@ -779,6 +783,7 @@ font: bold 12px arial;
 }
 
 .active-scaffold .sub-form input.text-input,
+.active-scaffold .sub-form input.cds-input,
 .active-scaffold .sub-form select {
 letter-spacing: 0;
 font: bold 12px arial;
